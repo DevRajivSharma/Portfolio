@@ -3,6 +3,7 @@
 // ============================================
 
 document.addEventListener('DOMContentLoaded', () => {
+  initCursorGlow();
   initNavbar();
   initTypingEffect();
   initScrollReveal();
@@ -12,10 +13,34 @@ document.addEventListener('DOMContentLoaded', () => {
   initParticles();
 });
 
+// ---- Cursor Glow Effect ----
+function initCursorGlow() {
+  const glow = document.getElementById('cursor-glow');
+  if (!glow) return;
+
+  let mouseX = 0, mouseY = 0;
+  let glowX = 0, glowY = 0;
+
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  });
+
+  function animate() {
+    glowX += (mouseX - glowX) * 0.08;
+    glowY += (mouseY - glowY) * 0.08;
+    glow.style.left = glowX + 'px';
+    glow.style.top = glowY + 'px';
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+}
+
 // ---- Navbar Scroll Effect ----
 function initNavbar() {
   const navbar = document.getElementById('navbar');
-  const navLinks = document.querySelectorAll('.nav-links a:not(.nav-cta)');
+  const navLinks = document.querySelectorAll('.nav-links a[data-nav]:not(.nav-cta)');
   const sections = document.querySelectorAll('.section');
 
   window.addEventListener('scroll', () => {
@@ -47,6 +72,8 @@ function initNavbar() {
 // ---- Typing Effect ----
 function initTypingEffect() {
   const typedElement = document.getElementById('typed-text');
+  if (!typedElement) return;
+
   const phrases = [
     'Software Developer',
     'MERN Stack Developer',
@@ -107,7 +134,7 @@ function initScrollReveal() {
 
 // ---- Counter Animation ----
 function initCounterAnimation() {
-  const counters = document.querySelectorAll('.hero-stat-number');
+  const counters = document.querySelectorAll('.hero-metric-value');
 
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -196,7 +223,7 @@ function initParticles() {
 
   const ctx = canvas.getContext('2d');
   let particles = [];
-  const particleCount = 50;
+  const particleCount = 40;
 
   function resize() {
     canvas.width = window.innerWidth;
@@ -214,10 +241,10 @@ function initParticles() {
     reset() {
       this.x = Math.random() * canvas.width;
       this.y = Math.random() * canvas.height;
-      this.size = Math.random() * 2 + 0.5;
-      this.speedX = (Math.random() - 0.5) * 0.3;
-      this.speedY = (Math.random() - 0.5) * 0.3;
-      this.opacity = Math.random() * 0.3 + 0.05;
+      this.size = Math.random() * 1.5 + 0.5;
+      this.speedX = (Math.random() - 0.5) * 0.25;
+      this.speedY = (Math.random() - 0.5) * 0.25;
+      this.opacity = Math.random() * 0.2 + 0.03;
     }
 
     update() {
@@ -231,7 +258,7 @@ function initParticles() {
     draw() {
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(108, 99, 255, ${this.opacity})`;
+      ctx.fillStyle = `rgba(124, 106, 239, ${this.opacity})`;
       ctx.fill();
     }
   }
@@ -247,10 +274,10 @@ function initParticles() {
         const dy = particles[i].y - particles[j].y;
         const distance = Math.sqrt(dx * dx + dy * dy);
 
-        if (distance < 150) {
-          const opacity = (1 - distance / 150) * 0.08;
+        if (distance < 140) {
+          const opacity = (1 - distance / 140) * 0.06;
           ctx.beginPath();
-          ctx.strokeStyle = `rgba(108, 99, 255, ${opacity})`;
+          ctx.strokeStyle = `rgba(124, 106, 239, ${opacity})`;
           ctx.lineWidth = 0.5;
           ctx.moveTo(particles[i].x, particles[i].y);
           ctx.lineTo(particles[j].x, particles[j].y);
@@ -309,13 +336,13 @@ function showNotification(message, type = 'success') {
     position: fixed;
     bottom: 30px;
     right: 30px;
-    padding: 16px 28px;
-    background: ${type === 'success' ? 'rgba(0, 212, 170, 0.15)' : 'rgba(255, 107, 157, 0.15)'};
-    border: 1px solid ${type === 'success' ? 'rgba(0, 212, 170, 0.3)' : 'rgba(255, 107, 157, 0.3)'};
-    backdrop-filter: blur(12px);
-    border-radius: 12px;
-    color: ${type === 'success' ? '#00d4aa' : '#ff6b9d'};
-    font-family: 'Inter', sans-serif;
+    padding: 18px 30px;
+    background: ${type === 'success' ? 'rgba(45, 212, 168, 0.12)' : 'rgba(244, 114, 182, 0.12)'};
+    border: 1px solid ${type === 'success' ? 'rgba(45, 212, 168, 0.25)' : 'rgba(244, 114, 182, 0.25)'};
+    backdrop-filter: blur(16px);
+    border-radius: 14px;
+    color: ${type === 'success' ? '#2dd4a8' : '#f472b6'};
+    font-family: 'Space Grotesk', sans-serif;
     font-size: 0.9rem;
     font-weight: 500;
     z-index: 9999;
